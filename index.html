@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Five human competencies that complement AI</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap">
+<style>
+:root{--brand:oklch(88.677% .18219 95.33);--brand-ink:oklch(16% 0 0);--bg:oklch(98.5% .008 95);--panel:#fff;--ink:var(--brand-ink);--mute:oklch(44% .01 95);--line:oklch(86% .015 95);--E:var(--brand);--P:var(--brand);--O:var(--brand);--C:var(--brand);--H:var(--brand);--acc:var(--brand);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:oklch(16% 0 0);--panel:oklch(21.5% 0 0);--ink:oklch(98% .006 95);--mute:oklch(75% .01 95);--line:oklch(36% 0 0)}}
+:root[data-theme="dark"]{--bg:oklch(16% 0 0);--panel:oklch(21.5% 0 0);--ink:oklch(98% .006 95);--mute:oklch(75% .01 95);--line:oklch(36% 0 0)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans KR",system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Apple SD Gothic Neo",system-ui,sans-serif;line-height:1.12;margin:0}
+main{max-width:1060px;margin:0 auto;padding:40px 20px 64px}
+header p{max-width:62ch;color:var(--mute);margin:16px 0 0}
+h1{font-size:clamp(2rem,5.5vw,3.4rem);max-width:18ch}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;margin-top:36px;align-items:start}
+@media(max-width:820px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}
+svg{width:100%;height:auto;display:block;max-width:420px;margin:0 auto}
+.node{cursor:pointer;outline:none}.node circle{transition:r .2s,stroke-width .2s}
+.node:focus-visible circle{stroke:var(--ink);stroke-width:4}
+.node text{fill:#fff;font:700 26px "Bricolage Grotesque",sans-serif;pointer-events:none}
+.lbl{fill:var(--ink);font:700 17px "Bricolage Grotesque",sans-serif;letter-spacing:.04em}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0}
+button{font:inherit;color:inherit}
+.tab,.ctx button{border:1px solid var(--line);background:transparent;border-radius:999px;padding:6px 14px;cursor:pointer;font-size:.9rem}
+.tab[aria-selected="true"],.ctx button[aria-pressed="true"]{background:var(--brand-ink);color:var(--brand);border-color:var(--brand-ink)}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+#head{display:flex;gap:14px;align-items:center}
+#badge{width:48px;height:48px;border-radius:50%;color:#fff;display:grid;place-items:center;font:700 24px "Bricolage Grotesque",sans-serif;flex:none;background:var(--acc)}
+#body p{margin:0 0 12px}#body ul{padding-left:20px;margin:0}#body li{margin:0 0 10px}
+.ctx{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.q{border-left:4px solid var(--acc);padding-left:14px}
+section{margin-top:44px}
+section h2{font-size:1.6rem;margin-bottom:6px}
+section>p{color:var(--mute);max-width:64ch;margin:0 0 18px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.steps div{border-top:4px solid var(--ink);padding-top:10px}
+.steps h3{font-size:1.1rem;margin-bottom:4px}.steps p{margin:0;color:var(--mute);font-size:.93rem}
+footer{margin-top:48px;color:var(--mute);font-size:.85rem;max-width:80ch}
+#pent{stroke-dasharray:1;animation:draw 1s ease-out both}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.node{transform-box:fill-box;transform-origin:center}
+.node.in{animation:pop .55s cubic-bezier(.2,1.5,.4,1) both;animation-delay:calc(.7s + var(--i)*.13s)}
+@keyframes pop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}
+.node:hover circle{stroke-width:5}
+#ring{fill:none;stroke:var(--acc);stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center;transition:cx .4s ease,cy .4s ease}
+#ring.pulse{animation:ripple 1.3s ease-out 2}
+@keyframes ripple{from{opacity:.65;transform:scale(1)}to{opacity:0;transform:scale(1.8)}}
+.fade{animation:fadein .4s ease both}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.swap{animation:swap .35s ease both}
+@keyframes swap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#badge{transition:background .3s}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.sub{font-size:.95rem;margin:4px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.chips span{border:1.5px solid var(--acc);border-radius:999px;padding:4px 12px;font-size:.9rem}
+#ai .chips span,#ai .q{border-color:var(--ink)}#ai .q{margin:0}
+.ph{border:1px dashed var(--line);border-radius:10px;padding:14px;color:var(--mute);font-style:italic}
+#ai{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}#ai h2{font-size:1.4rem;margin-bottom:10px}#ai p{margin:0}
+
+.act{margin-top:48px}.act>h2{font-size:1.7rem}.act>p{color:var(--mute);max-width:62ch;margin:6px 0 20px}
+.stepgrid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:20px}
+@media(max-width:820px){.stepgrid{grid-template-columns:1fr}}
+.stepgrid h3{font-size:1.15rem;margin-bottom:10px}
+.n{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--brand-ink);color:var(--brand);font-size:.9rem;margin-right:8px}
+.btn{border:0;border-radius:999px;background:var(--brand-ink);color:var(--brand);padding:9px 20px;font-weight:500;cursor:pointer}
+.btn[disabled]{opacity:.45;cursor:default}
+#sw{transform-origin:100px 110px;transform-box:view-box;transition:transform 4s cubic-bezier(.17,.67,.12,1)}
+#spinsvg{max-width:280px}
+#res,#qtxt{min-height:3.2em}
+#qtxt{font-size:1.1rem;margin:0 0 12px}
+textarea{width:100%;min-height:76px;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;resize:vertical}
+#board{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:16px}
+.tile{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px;position:relative;animation:pop .4s cubic-bezier(.2,1.5,.4,1) backwards;transition:transform .2s}
+.tile:nth-child(odd){transform:rotate(-1.2deg)}.tile:nth-child(even){transform:rotate(1.2deg)}
+.tile .b{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--brand-ink);color:var(--brand);font:700 15px "Bricolage Grotesque",sans-serif;margin-bottom:6px}
+.tile .b.a{background:var(--brand);color:var(--brand-ink)}
+.tile p{margin:0;font-size:.93rem}
+.tile button{position:absolute;top:6px;right:8px;border:0;background:none;cursor:pointer;color:var(--mute);font-size:1.1rem}
+.empty{color:var(--mute);font-style:italic;margin:14px 0 0}
+section.board-column{margin:0;padding:14px;border-top:4px solid var(--brand);background:var(--bg);border-radius:8px;min-width:0}.board-column h3{font-size:1rem;margin-bottom:14px}.board-column .tile{background:var(--panel);margin-bottom:12px;transform:none;overflow-wrap:anywhere;white-space:pre-wrap}#board{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:820px){#board{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:480px){#board{grid-template-columns:1fr}}.btn{background:var(--brand);color:var(--brand-ink)}.btn:hover:not([disabled]){filter:brightness(.94)}.tab[aria-selected="true"],.ctx button[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}.chips span{border-color:var(--line)}textarea::placeholder{color:var(--mute)}:focus-visible{outline-color:var(--ink)}.node:focus-visible circle{stroke:var(--ink)}#ring{stroke:var(--ink)}::selection{background:var(--brand);color:var(--brand-ink)}</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Five human competencies that complement AI</h1>
+<p>The EPOCH framework is not primarily a leadership development model. It is a labour economics research framework developed at MIT Sloan Business School to measure which human work tasks are most resilient to AI substitution. The researchers - Isabella Loaiza and Roberto Rigobon - found that all EPOCH capability groups were associated with employment growth.</p>
+</header>
+
+<div class="grid">
+  <div class="card">
+    <svg viewBox="0 0 360 360" role="group" aria-label="EPOCH wheel with A for Artificial Intelligence. Select a letter.">
+      <polygon id="pent" pathLength="1" fill="none" stroke="var(--line)" stroke-width="2"/>
+            <g id="nodes"></g>
+    </svg>
+      </div>
+  <div class="card">
+    <div id="head"><div id="badge"></div><h2 id="title"></h2></div>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div id="body" role="tabpanel" aria-live="polite"></div>
+  </div>
+</div>
+
+<section class="act">
+<h2>Activity: Spin, Reflect, Act</h2>
+<p>Try this alone or in pairs. Spin for a capability, answer the question it gives you, then pin your next step to a vision board.</p>
+<div class="stepgrid">
+<div class="card">
+<h3><span class="n">1</span>Spin the wheel</h3>
+<svg id="spinsvg" viewBox="0 0 200 210" role="img" aria-label="Spinning wheel with the letters E, P, O, C, H and A"><g id="sw"></g><polygon points="90,2 110,2 100,26" fill="var(--ink)" stroke="var(--panel)" stroke-width="2"/></svg>
+<div style="text-align:center;margin-top:8px"><button class="btn" id="spin">Spin the wheel</button></div>
+<p id="res" aria-live="polite" style="text-align:center;margin:10px 0 0"></p>
+</div>
+<div>
+<div class="card" style="margin-bottom:20px">
+<h3><span class="n">2</span>Reflect with a question</h3>
+<p id="qtxt">Spin the wheel to get your question.</p>
+<button class="btn" id="more" disabled>Another question</button>
+</div>
+<div class="card">
+<h3><span class="n">3</span>Vision board your next step</h3>
+<label for="step" style="display:block;margin-bottom:6px">What will you do next, and who will help you?</label>
+<textarea id="step" maxlength="500" placeholder="Write one concrete next step"></textarea>
+<div style="margin-top:10px"><button class="btn" id="pin" disabled>Add to vision board</button></div>
+<p id="submit-status" role="status"></p>
+
+</div>
+</div>
+</div>
+</section>
+<section class="card"><h2>Our shared vision board</h2><p>Small steps. Shared possibilities.</p><p id="board-status" role="status"></p><p id="response-count"></p><div id="board"></div></section></main>
+
+<script src="config.js"></script><script>
+var D=[
+{k:'E',n:'Empathy',t:'Empathy and Emotional Intelligence',c:'--E',def:'The capability to share what another person is experiencing and build genuine, meaningful connections.',fall:'While AI systems can analyze data to detect human emotions or simulate conversational scripts, they cannot authentically experience or replicate genuine human-to-human empathy or emotional reciprocity.'},
+{k:'P',n:'Presence',t:'Presence, Networking, and Connectedness',c:'--P',def:'The reliance on physical co-presence, collaboration, and human-to-human interaction to build trust and navigate social landscapes.',fall:'AI operates entirely within virtual or technology-mediated boundaries. It lacks an embodied physical existence, preventing it from mimicking the spontaneous, face-to-face trust-building that drives real-world team collaboration and innovation.'},
+{k:'O',n:'Opinion',t:'Opinion, Judgment, and Ethics',c:'--O',def:'The capacity to navigate open-ended, ambiguous systems, apply normative values, and exercise objective wisdom.',fall:'AI struggles to grasp concepts of absolute accountability, moral consequence, and legal responsibility. Algorithms operate on statistical probabilities within defined data parameters; they cannot take ultimate ownership of a high-stakes decision.',find:'They found that all five capability groups were associated with employment growth, with the largest association for Hope and the second largest for Opinion.'},
+{k:'C',n:'Creativity',t:'Creativity and Imagination',c:'--C',def:'The visualization of structural possibilities entirely beyond current reality, often manifesting as original ideas, humor, and live improvisation.',fall:'Generative AI is mathematically derivative: it rearranges, patterns, and synthesizes existing training data. Humans can completely break from baseline instructions, reframe a problem from scratch, and innovate without a pre-existing dataset.'},
+{k:'H',n:'Hope',t:'Hope, Vision, and Leadership',c:'--H',def:'The exercise of grit, perseverance, initiative, and aspirational goal-setting to guide or inspire human teams through uncertainty.',fall:'Humans are uniquely capable of looking at long odds, poor historical data, and absolute uncertainty, yet deciding to act anyway out of principle or philosophy. AI cannot formulate its own inner sense of "purpose" or emotionally rally human teams through volatile transitions.',find:'They found that all five capability groups were associated with employment growth, with the largest association for Hope and the second largest for Opinion.'},
+{k:'A',n:'AI',t:'Artificial Intelligence',c:'--ink'}
+];
+var EP={
+E:{s:["Self-awareness","Empathic listening","Emotion regulation","Social sensitivity"],w:"Leaders who understand themselves and others build trust, resolve conflict, and inspire inclusion."},
+P:{s:["Executive presence","Relationship building","Mindful presence","Intercultural dialogue"],w:"A leader's impact scales with the strength and breadth of the relationships they hold."},
+O:{s:["Reasoned opinion","Sound judgment","Ethical grounding","Stakeholder balance"],w:"Trust is earned through consistent, principled decisions \u2014 even when no one is watching."},
+C:{s:["Divergent thinking","Problem reframing","Creative courage","Design thinking"],w:"The most complex business challenges require leaders who can imagine what does not yet exist."},
+H:{s:["Optimistic leadership","Compelling vision","Motivating others","Resilience"],w:"People follow leaders who can see beyond today's obstacles and make others believe in tomorrow."},
+A:{s:["Understanding AI","Using AI tools","Critical AI thinking","Ethics and responsibility","Human-AI collaboration","Adaptability and lifelong learning"],n:"EPOCHA training is woven through all work-based learning projects."}
+};
+function chips(a){return '<div class="chips">'+a.map(function(x){return '<span>'+x+'</span>'}).join('')+'</div>'}
+function isY(k){return k==='A'}
+var TABS=[['def','MIT core definition'],['fall','Where AI falls short'],['ep','EPOCHA leadership training']];
+var sel=0,tab='def';
+var NS='http://www.w3.org/2000/svg',cx=180,cy=180,R=125;
+function pt(i,r){var a=(i*60-90)*Math.PI/180;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]}
+function css(v){return 'var('+v+')'}
+function drawWheel(){
+ var g=document.getElementById('nodes');g.innerHTML='';
+ document.getElementById('pent').setAttribute('points',D.map(function(d,i){return pt(i,R).join(',')}).join(' '));
+ var ring=document.createElementNS(NS,'circle');ring.setAttribute('id','ring');ring.setAttribute('r',36);g.appendChild(ring);
+ D.forEach(function(d,i){
+  var p=pt(i,R),n=document.createElementNS(NS,'g');
+  n.setAttribute('class','node in');n.style.setProperty('--i',i);n.id='n'+i;n.setAttribute('tabindex','0');n.setAttribute('role','button');n.setAttribute('aria-label',d.t);
+  n.innerHTML='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="28" fill="'+(isY(d.k)?'var(--brand)':'var(--brand-ink)')+'" stroke="var(--line)" stroke-width="2" style="transition:r .25s ease,stroke-width .2s"/><text style="fill:'+(isY(d.k)?'var(--brand-ink)':'var(--brand)')+'" x="'+p[0]+'" y="'+(p[1]+9)+'" text-anchor="middle">'+d.k+'</text>';
+  n.onclick=function(){pick(i)};
+  n.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(i)}};
+  n.onanimationend=function(){n.classList.remove('in')};
+  g.appendChild(n);
+ });
+ var c=document.createElementNS(NS,'text');c.id='ctr';c.setAttribute('x',cx);c.setAttribute('y',cy+6);c.setAttribute('text-anchor','middle');c.setAttribute('class','lbl');g.appendChild(c);
+ setSel(false);
+}
+function setSel(anim){
+ D.forEach(function(d,i){var n=document.getElementById('n'+i);n.setAttribute('aria-pressed',i===sel);n.firstChild.style.r=(i===sel?36:28)+'px'});
+ var p=pt(sel,R),r=document.getElementById('ring'),c=document.getElementById('ctr');
+ r.style.cx=p[0]+'px';r.style.cy=p[1]+'px';c.textContent='EPOCHA';
+ if(anim){r.classList.remove('pulse');void r.getBoundingClientRect();r.classList.add('pulse');}
+}
+function restart(e,c){e.classList.remove(c);void e.getBoundingClientRect();e.classList.add(c)}
+function pick(i){sel=i;setSel(true);render(true)}
+function render(anim){
+ var d=D[sel];if(d.k==='A')tab='ep';
+ var b=document.getElementById('badge');b.textContent=d.k;b.style.background=isY(d.k)?'var(--brand)':'var(--brand-ink)';b.style.color=isY(d.k)?'var(--brand-ink)':'var(--brand)';
+ document.getElementById('title').textContent=d.t;
+ var t=document.getElementById('tabs');t.innerHTML='';
+ (d.k==='A'?[TABS[2]]:TABS).forEach(function(x){var e=document.createElement('button');e.className='tab';e.setAttribute('role','tab');e.setAttribute('aria-selected',tab===x[0]);e.textContent=x[1];e.onclick=function(){tab=x[0];render(true)};t.appendChild(e)});
+ var h='<p>'+(tab==='def'?d.def:d.fall)+'</p>'+(tab==='def'&&d.find?'<p class="q">'+d.find+'</p>':'');
+ if(tab==='ep'){var e=EP[d.k];h='<h3 class="sub">Key sub-skills</h3>'+chips(e.s)+(e.w?'<h3 class="sub">Why it matters</h3><p>'+e.w+'</p>':'<p class="q">'+e.n+'</p>')}
+ var body=document.getElementById('body');body.innerHTML=h;
+ if(anim){restart(document.getElementById('head'),'swap');restart(body,'swap')}
+}
+drawWheel();render();
+
+(function(){
+var L=[['E','Empathy'],['P','Presence'],['O','Opinion'],['C','Creativity'],['H','Hope'],['A','Artificial Intelligence']];
+var Q=window.EPOCHA_CONFIG.questions; var rot=0,cur=null,qi=0,busy=false,g=document.getElementById('sw'),NS='http://www.w3.org/2000/svg';
+function P(a,r){a=a*Math.PI/180;return[100+r*Math.sin(a),110-r*Math.cos(a)]}
+L.forEach(function(l,i){
+ var a=P(i*60,88),b=P((i+1)*60,88),isA=isY(l[0]),p=document.createElementNS(NS,'path');
+ p.setAttribute('d','M100,110 L'+a+' A88,88 0 0 1 '+b+' Z');p.setAttribute('fill',isA?'var(--brand)':'var(--brand-ink)');p.setAttribute('stroke','var(--panel)');p.setAttribute('stroke-width','2');g.appendChild(p);
+ var c=P(i*60+30,58),t=document.createElementNS(NS,'text');
+ t.setAttribute('x',c[0]);t.setAttribute('y',c[1]+9);t.setAttribute('text-anchor','middle');t.setAttribute('style','font:700 26px "Bricolage Grotesque",sans-serif;fill:'+(isA?'var(--brand-ink)':'var(--brand)'));t.textContent=l[0];g.appendChild(t);
+});
+function show(){
+ document.getElementById('qtxt').textContent=(Q[cur[0]][qi%Q[cur[0]].length] || 'Questions are coming soon. Choose one concrete next step for this capability.');
+ document.getElementById('more').disabled=Q[cur[0]].length<2; pin.disabled=!st.value.trim();
+}
+document.getElementById('spin').onclick=function(){
+ if(busy)return;busy=true;this.disabled=true;
+ var i=Math.floor(Math.random()*6),jit=Math.random()*40-20;
+ rot=Math.ceil(rot/360)*360+1800-(i*60+30)+jit;
+ g.style.transform='rotate('+rot+'deg)';
+ document.getElementById('res').textContent='Spinning...';
+ var btn=this,ms=window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:4100;
+ setTimeout(function(){
+  cur=L[i];qi=0;busy=false;btn.disabled=false;btn.textContent='Spin again';
+  document.getElementById('res').innerHTML='You landed on <b>'+cur[0]+': '+cur[1]+'</b>';
+  show();
+ },ms);
+};
+document.getElementById('more').onclick=function(){qi++;show()};
+var st=document.getElementById('step'),pin=document.getElementById('pin'),sending=false;
+st.oninput=function(){pin.disabled=sending||!cur||!st.value.trim()};
+pin.onclick=async function(){
+ if(sending||!cur||!st.value.trim())return;
+ sending=true;pin.disabled=true;st.disabled=true;document.getElementById('spin').disabled=true;pin.textContent='Submitting…';
+ var notice=document.getElementById('submit-status');notice.textContent='';
+ try{await window.submitVisionStep(cur[0],st.value);st.value='';notice.textContent='Your next step is on the board. Thank you!';}
+ catch(e){notice.textContent='Could not submit. Your answer is still here. Please try again.';}
+ finally{sending=false;st.disabled=false;document.getElementById('spin').disabled=false;pin.textContent='Add to vision board';pin.disabled=!st.value.trim();}
+};
+})();
+</script>
+<script src="board.js"></script></body>
+</html>
+
+
