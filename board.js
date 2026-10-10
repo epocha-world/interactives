@@ -20,7 +20,7 @@
         const column = document.createElement('section'); column.className = 'board-column';
         const heading = document.createElement('h3'); column.append(heading);
         const preset = document.createElement('article'); preset.className = 'tile preset';
-        const presetLabel = document.createElement('span'); presetLabel.className = 'preset-label'; presetLabel.textContent = 'Example action · not a participant response';
+        const presetLabel = document.createElement('span'); presetLabel.className = 'preset-label'; presetLabel.textContent = 'Example action';
         const example = document.createElement('p'); example.textContent = config.presets[key]; preset.append(presetLabel, example); column.append(preset);
         board.append(column); columns.set(key, {column, heading, preset});
       }
