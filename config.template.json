@@ -1,7 +1,6 @@
-// Public configuration only. Never use a secret or service-role key.
-window.EPOCHA_CONFIG = {
-  "supabaseUrl": "https://wgmhrtdkudjhsuchnycw.supabase.co",
-  "publishableKey": "sb_publishable_QIgEf6SkLTUjwPf7mJ2n9w_PNCi3Qzj",
+{
+  "supabaseUrl": "",
+  "publishableKey": "",
   "eventId": "korcos-2026",
   "questions": {
     "E": [
@@ -122,4 +121,4 @@ window.EPOCHA_CONFIG = {
     "H": "Pick one routine task that AI can help with, use it to free up thirty minutes, and spend that time on something that supports a student's or colleague's wellbeing.",
     "A": "Create space with students to discuss how AI affects their social dynamics and integration."
   }
-};
+}

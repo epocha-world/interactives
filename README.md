@@ -1,28 +1,27 @@
 # EPOCHA · KORCOS 2026
 
-Open `index.html` through a static web server to preview. Content follows the updated event mock-up and uses the EPOCHA brand palette. The final question list is in `config.js`: E 18, P 15, O 16, C 18, H 14, A 16. Participants must consent before their first spin and spin before submitting. Responses are limited to 500 characters and rendered as text.
+Anonymous reflection activity with 97 questions, six category boards, example actions, and consent before the first spin. Polling preserves existing cards and expanded questions. Colors follow the system preference.
 
-## Connect the shared board
+## Local preview
 
-The current page is connected to the `epocha` Supabase project (`wgmhrtdkudjhsuchnycw`). Its `vision_steps` table and read/insert policies are installed. The publishable browser key is configured; secret keys are not used.
+Run `node build.cjs` and serve the generated `dist/` directory with a static web server. With no configuration it runs in browser-only preview mode. Your ignored local `config.js`, if present, supplies the Supabase URL and publishable key for a connected local build.
 
-1. Run `supabase-setup.sql` once in a new Supabase project. If the previous table already exists, use `supabase-upgrade.sql` instead to preserve existing responses.
-2. In `config.js`, fill in the project URL and **publishable** API key. Never use a secret or service-role key. These settings are public.
-3. Deploy this folder to Vercel as a static site (Other framework, no build command, root output directory).
-4. Test the deployed site on two devices: submit on one and confirm the response appears under the same letter on the other within a few seconds.
+Questions and example actions live in `config.template.json`. Rebuild after changing them.
 
-The shared board polls Supabase every two seconds and refreshes after submission. No additional packages are required. Without configuration, preview responses persist only in the same browser; the page labels this mode explicitly. Failed submissions retain the answer, and retries use the same response ID to avoid duplicates.
+## Vercel
 
-This is a public, anonymous event board: anyone with the site can read and submit. Participants cannot edit or delete responses. Organizers can remove inappropriate responses in the Supabase table editor. There is no moderation queue or anti-spam protection yet. Before wider public promotion, decide whether the event needs those controls. Do not invite participants to post private information.
+Set `SUPABASE_URL` (HTTPS project URL) and `SUPABASE_PUBLISHABLE_KEY` (`sb_publishable_...` browser key) for your deployment environments. `vercel.json` runs `node build.cjs` and publishes only `dist/`. No packages are required. Missing configuration fails the Vercel build. Never supply a secret or service-role key: browser configuration is visible to site visitors.
 
-The schema is scoped to `korcos-2026`. Changing the event identifier requires updating the database constraint and policies as well as the config.
+## Supabase
 
-Verified against the real project: consent → browser submission → database row with the exact category/question/action and a server timestamp → automatic appearance in a second independent browser session. Wrong events, invalid categories, client-supplied timestamps, and public deletion were rejected. The labelled test response was removed after verification. The Vercel deployment remains unverified.
+Run `supabase-setup.sql` for a new project. Use `supabase-upgrade.sql` only when upgrading the previous table. `supabase-trigger-permissions.sql` restricts the optional internal RLS event trigger and applies only to projects that have that function. SQL schemas are public source, not response datasets, and are excluded from the deployed site.
 
-## Collection and consent
+The connected project already has the table and policies. Submissions store `category`, the exact displayed `question`, the action (`body`), and server-generated `created_at`; `id` enables safe retries and `event_id` scopes the event. Public visitors can read and insert, but cannot edit/delete rows or supply a timestamp. Examples are excluded from responses and participant counts.
 
-Each submission stores the wheel category, the exact displayed reflection question, the action (`body`), and the server-generated `created_at` timestamp. A response ID supports safe retries and `event_id` separates the event. The browser cannot supply a timestamp through its column-level INSERT grants. No participant identity or consent field is collected. The checkbox is unchecked initially and is held only in page memory; reload requires consent again. Cancel/Escape reveals no result and submits no data.
+Consent is kept only in page memory and requested again on reload. No name, email, login, or consent record is collected. Submitted text appears publicly and may be used in reports, as explained before consent. Participants must avoid identifying details. Providers may retain operational request logs.
 
-The six preset actions are labelled examples, appear in every board category, and are excluded from participant counts and the database. Drafts must be submitted or cleared before changing category or question, so a saved answer retains the correct context. Old responses have no historical question; the upgrade does not invent one.
+## Repository hygiene
 
-Anonymous here means no identifying fields are requested in the response dataset. Hosting and database providers may retain operational request logs. Participants must avoid identifiable free text. Public reporting and quotation use are explained before consent; the application does not store proof of consent, as requested.
+Local configuration, environment files, build output, logs, private keys, exports, and agent state are ignored. Do not commit participant exports or private source documents. The previously committed Supabase publishable key is public by design; removing configuration from future commits does not erase Git history.
+
+Browser checks cover consent, question association, retry safety, live updates, stable polling, accordion behavior, and both themes. Actual Supabase submission and an independent browser update were verified. Vercel deployment has not been verified.
